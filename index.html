@@ -3,525 +3,786 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruta Eventos MTY | Directorio Premium de Autoría Directa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>Ruta Eventos MTY | Premium</title>
     
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
-        /* --- VARIABLES DE COLOR Y PALETAS --- */
+        /* ==========================================================================
+           1. VARIABLES GLOBALES (Root)
+           ========================================================================== */
         :root {
-            /* Paleta base (Modo Oscuro Predeterminado - "Gala Premium") */
-            --bg-deep: #05080f; /* Negro Ónix Profundo */
-            --bg-card: #0c121e; /* Azul Medianoche Profundo para tarjetas */
-            --text-primary: #f8fafc; /* Texto claro */
-            --text-muted: #94a3b8; /* Texto apagado */
-            --gold-main: #d4af37; /* Oro Metálico */
-            --gold-hover: #f1c40f; /* Oro brillante para hover */
-            --cyan-tech: #00e5ff; /* Turquesa/Cian para acentos modernos */
-            --border-subtle: rgba(255, 255, 255, 0.05);
-            --border-glow: rgba(0, 229, 255, 0.3);
-            --hero-gradient: linear-gradient(rgba(5, 8, 15, 0.7), rgba(5, 8, 15, 0.95));
+            /* Modo Oscuro (Por Defecto) */
+            --bg-main: #05080f;       
+            --bg-deep: #03050a;       
+            --bg-card: #0c121e;       
+            --text-main: #f8fafc;     
+            --text-sec: #94a3b8;      
+            --accent-gold: #d4af37;   
+            --accent-cyan: #00e5ff;   
+            
+            /* Variable dinámica (Sobrescrita por JS) */
+            --accent-dynamic: #d4af37; 
+
+            --font-title: 'Playfair Display', serif;
+            --font-text: 'Montserrat', sans-serif;
+            
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        /* Paleta alternativa (Modo Normal / Claro) */
-        .mode-light {
-            --bg-deep: #f9fafb; /* Fondo claro */
-            --bg-card: #ffffff; /* Tarjetas blancas */
-            --text-primary: #111827; /* Texto oscuro */
-            --text-muted: #6b7280; /* Texto apagado */
-            --border-subtle: rgba(0, 0, 0, 0.05);
-            --hero-gradient: linear-gradient(rgba(249, 250, 251, 0.8), rgba(249, 250, 251, 0.95));
+        /* Variables para el Modo Claro */
+        body.light-mode {
+            --bg-main: #f1f5f9;       
+            --bg-deep: #e2e8f0;       
+            --bg-card: #ffffff;       
+            --text-main: #0f172a;     
+            --text-sec: #475569;      
+            --glass-bg: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.1);
         }
 
-        /* --- ESTILOS GLOBALES --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Oculta el cursor por defecto */ }
+        /* ==========================================================================
+           2. RESET Y ESTILOS BASE
+           ========================================================================== */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            cursor: none !important; 
+            transition: background-color 0.4s ease, color 0.4s ease; 
+        }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-deep);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: var(--font-text);
+            overflow: hidden; 
+            min-height: 100vh;
         }
 
-        h1, h2, h3, .editorial-text { font-family: 'Playfair Display', serif; }
-        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
 
-        /* --- EFECTO DE CURSOR PERSONALIZADO --- */
-        .cursor-glow {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s;
+        /* Estilos compartidos de títulos de sección */
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-family: var(--font-title); font-size: clamp(2rem, 4vw, 2.8rem); color: var(--text-main); margin-bottom: 0.5rem;}
+        .section-header h2 span { color: var(--accent-dynamic); font-style: italic; }
+        .section-header p { color: var(--text-sec); font-size: 1.1rem; }
+
+        /* ==========================================================================
+           3. CURSOR PERSONALIZADO
+           ========================================================================== */
+        .cursor-dot, .cursor-glow {
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; transform: translate(-50%, -50%); z-index: 10000; 
         }
         .cursor-dot {
-            width: 8px; height: 8px; background: var(--gold-main); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 10000;
-            transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--gold-main); transition: transform 0.1s;
+            width: 8px; height: 8px; background-color: var(--accent-dynamic);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .cursor-glow {
+            width: 40px; height: 40px; background-color: rgba(0, 229, 255, 0.15); filter: blur(8px);
+        }
+        .cursor-dot.hover-active {
+            transform: translate(-50%, -50%) scale(2);
+            background-color: var(--accent-dynamic);
+            box-shadow: 0 0 10px var(--accent-dynamic);
         }
 
-        /* --- HEADER & NAVEGACIÓN DINÁMICA --- */
-        header {
-            display: flex; justify-content: space-between; align-items: center; padding: 15px 5%;
-            background: rgba(10, 15, 26, 0.8); position: fixed; width: 100%; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(12px);
-            transition: background 0.4s ease;
+        /* ==========================================================================
+           4. GATEKEEPER (PANTALLA DE BIENVENIDA)
+           ========================================================================== */
+        #welcome-screen {
+            position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+            background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop');
+            background-size: cover; background-position: center; transition: opacity 0.6s ease-in-out;
+        }
+        .welcome-overlay {
+            position: absolute; inset: 0; background-color: rgba(5, 8, 15, 0.85); z-index: 1;
+        }
+        .welcome-content {
+            position: relative; z-index: 2; text-align: center; width: 90%; max-width: 1000px;
+        }
+        .welcome-content h1 {
+            font-family: var(--font-title); font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--accent-gold);
+            margin-bottom: 0.5rem; letter-spacing: 2px; animation: fadeInDown 1s ease-out;
+        }
+        .welcome-content p {
+            font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-sec); margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        .grid-buttons {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 2rem 1.5rem;
+            color: #f8fafc; font-family: var(--font-text); font-size: 1.1rem; font-weight: 500; text-transform: uppercase;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .glass-btn:hover {
+            background: rgba(12, 18, 30, 0.6); border-color: var(--accent-gold); transform: translateY(-5px); color: var(--accent-gold);
         }
 
-        .mode-light header { background: rgba(249, 250, 251, 0.8); }
-
-        .logo-container { height: 50px; display: flex; align-items: center; }
-        .logo-img { height: 100%; object-fit: contain; transition: opacity 0.4s ease; }
+        /* ==========================================================================
+           5. HEADER DINÁMICO
+           ========================================================================== */
+        #main-app { display: none; opacity: 0; transition: opacity 1s ease; }
         
-        /* Lógica de ocultar/mostrar logos según el modo */
-        .mode-light .logo-dark { display: none; }
-        .mode-light .logo-light { display: block; }
-        body:not(.mode-light) .logo-light { display: none; }
-        body:not(.mode-light) .logo-dark { display: block; }
-
-        .nav-actions { display: flex; gap: 20px; align-items: center; }
-        
-        /* Botón de cambio de modo */
-        .btn-mode {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-primary); padding: 8px 15px; border-radius: 20px;
-            cursor: pointer; font-size: 0.8rem; font-weight: 500; font-family: 'Montserrat', sans-serif;
+        #main-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 80px; background: rgba(10, 15, 26, 0.8);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
+            z-index: 9000; display: flex; justify-content: space-between; align-items: center; padding: 0 5%;
+            transform: translateY(-100%); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
         }
-        .mode-light .btn-mode { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); }
-
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { font-size: 0.9rem; font-weight: 500; }
-        .nav-links a:hover { color: var(--cyan-tech); }
-
-        /* --- HERO CON EFECTO KEN BURNS (Banner Cinematográfico) --- */
-        .hero-container { position: relative; height: 85vh; width: 100%; overflow: hidden; margin-top: 70px; }
+        body.light-mode #main-header { background: rgba(255, 255, 255, 0.85); }
+        .logo { font-family: var(--font-title); font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .logo span { color: var(--accent-dynamic); }
         
+        .nav-menu { display: flex; align-items: center; gap: 2rem; }
+        .nav-link { font-size: 0.95rem; font-weight: 500; color: var(--text-main); position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-dynamic); transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        
+        .btn-proveedores {
+            background-color: var(--accent-dynamic); color: #05080f; padding: 0.6rem 1.5rem;
+            border-radius: 50px; font-weight: 600; font-size: 0.9rem; border: none; transition: transform 0.3s ease;
+        }
+        .btn-proveedores:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        
+        .theme-toggle {
+            background: transparent; border: 1px solid var(--glass-border); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { border-color: var(--accent-dynamic); color: var(--accent-dynamic); }
+
+        /* ==========================================================================
+           6. HERO SECTION
+           ========================================================================== */
+        #hero { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .hero-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80') center/cover;
-            animation: kenBurns 30s infinite alternate ease-in-out; z-index: 1;
+            position: absolute; inset: 0; background-size: cover; background-position: center; z-index: -2;
+            animation: kenBurns 25s infinite alternate ease-in-out;
         }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--hero-gradient); z-index: 2; transition: background 0.4s ease; }
-
-        @keyframes kenBurns {
-            0% { transform: scale(1); background-position: center; }
-            100% { transform: scale(1.15); background-position: top right; }
+        .hero-overlay {
+            position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,8,15,0.7) 0%, rgba(5,8,15,0.4) 100%); z-index: -1;
         }
-
-        .hero-content {
-            position: relative; z-index: 3; height: 100%; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center; padding: 0 20px;
-        }
-        .hero-content h1 { font-size: 4.8rem; color: var(--gold-main); margin-bottom: 10px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-        .hero-content p { font-size: 1.35rem; max-width: 750px; margin-bottom: 45px; color: #cbd5e1; }
-
-        /* --- BUSCADOR HERO INTELIGENTE --- */
-        .search-bar {
-            background: rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 50px;
-            display: flex; gap: 10px; border: 1px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px); width: 100%; max-width: 880px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: transform 0.3s;
-        }
-        .mode-light .search-bar { background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.1); }
-        .search-bar:hover { transform: translateY(-3px); border-color: rgba(212, 175, 55, 0.6); }
-
-        .search-bar input, .search-bar select {
-            background: transparent; border: none; color: white; padding: 15px 30px;
-            font-size: 1rem; outline: none; flex: 1; font-family: 'Montserrat', sans-serif;
-        }
-        .mode-light .search-bar input, .mode-light .search-bar select { color: black; }
-        .search-bar select option { background: var(--bg-deep); color: white; }
-
-        .btn-search {
-            background: var(--gold-main); color: var(--bg-deep); border: none; padding: 15px 45px;
-            border-radius: 50px; font-weight: 700; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;
-        }
-        .btn-search:hover { background: var(--gold-hover); box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
-
-        /* --- FILTROS RÁPIDOS PILLS (Dinamismo en Vivo) --- */
-        .filters-container { padding: 50px 5%; text-align: center; margin-bottom: 40px; border-bottom: 1px solid var(--border-subtle); }
-        .filter-btn {
-            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary);
-            padding: 10px 25px; border-radius: 30px; margin: 6px; transition: all 0.3s; font-size: 0.9rem; font-weight: 500;
-        }
-        .mode-light .filter-btn { border: 1px solid rgba(0,0,0,0.08); }
-        .filter-btn:hover, .filter-btn.active {
-            border-color: var(--cyan-tech); color: var(--cyan-tech); background: rgba(0, 229, 255, 0.1); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
-        }
-
-        /* --- GRID DE PROVEEDORES (Directorio Premium de Autoría) --- */
-        .proveedores { padding: 60px 5%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 35px; }
-
-        .card {
-            background-color: var(--bg-card); border-radius: 18px; overflow: hidden;
-            border: 1px solid var(--border-subtle); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-        .mode-light .card { border: 1px solid rgba(0,0,0,0.08); }
-        .card:hover { transform: translateY(-12px); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(0, 229, 255, 0.1); border-color: var(--gold-main); }
-
-        .card-img-wrapper { overflow: hidden; height: 250px; position: relative; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .card:hover .card-img { transform: scale(1.1); }
-
-        .badge-rating {
-            position: absolute; top: 15px; right: 15px; background: rgba(10, 15, 26, 0.85);
-            color: var(--gold-main); padding: 7px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; backdrop-filter: blur(5px); z-index: 10; border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .card-content { padding: 30px; }
-        .category { color: var(--cyan-tech); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px; display: inline-block; }
-        .card-title { font-size: 1.65rem; color: #fff; margin-bottom: 10px; transition: color 0.3s; }
-        .mode-light .card-title { color: black; }
-        .card:hover .card-title { color: var(--gold-main); }
-        .location { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
-        .card-text { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6; }
-
-        /* CTA DIRECTO A WHATSAPP */
-        .btn-contact {
-            display: block; width: 100%; padding: 14px; background: rgba(255,255,255,0.03); color: var(--gold-main);
-            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; text-align: center;
-            font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
-        }
-        .mode-light .btn-contact { background: rgba(0,0,0,0.03); border: 1px solid rgba(212, 175, 55, 0.2); }
-        .btn-contact:hover { background: var(--gold-main); color: var(--bg-deep); }
-
-        /* --- INSPIRACIÓN locally sourced (Bodas Reales en MTY/SPGG) --- */
-        .inspiration { background-color: var(--bg-deep); padding: 80px 5%; border-top: 1px solid var(--border-subtle); }
-        .masonry { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .masonry-item { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; cursor: pointer; }
-        .masonry-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .masonry-item:hover img { transform: scale(1.08); }
-        .masonry-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 20px 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.95)); color: white; transform: translateY(30px); opacity: 0; transition: all 0.3s;
-        }
-        .masonry-item:hover .masonry-overlay { transform: translateY(0); opacity: 1; }
-        .masonry-overlay h4 { color: var(--gold-main); font-size: 1.2rem; margin-bottom: 5px; }
+        body.light-mode .hero-overlay { background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%); }
         
-        /* Sección de Herramientas de Planeación */
-        .planning-tools { background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-card) 100%); padding: 80px 5%; text-align: center; border-bottom: 1px solid var(--border-subtle); }
-        .tools-grid { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
-        .tool-card {
-            background: rgba(0,0,0,0.3); padding: 40px; border-radius: 16px; border: 1px solid rgba(0, 229, 255, 0.1); width: 250px; transition: all 0.3s;
+        .hero-content { position: relative; z-index: 1; text-align: center; width: 90%; max-width: 900px; margin-top: 50px; }
+        .hero-content h1 {
+            font-family: var(--font-title); font-size: clamp(3rem, 6vw, 5rem); color: var(--accent-dynamic);
+            line-height: 1.1; margin-bottom: 1.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: color 0.5s ease;
         }
-        .tool-card:hover { background: rgba(0, 229, 255, 0.05); border-color: var(--cyan-tech); transform: translateY(-5px); }
-        .tool-icon { font-size: 3.5rem; margin-bottom: 25px; display: block; }
-        .tool-card h3 { color: white; margin-bottom: 10px; font-size: 1.2rem; }
-        .mode-light .tool-card h3 { color: black; }
-        .tool-card p { color: var(--text-muted); font-size: 0.9rem; }
+        .hero-content p { font-size: clamp(1.1rem, 2vw, 1.3rem); color: var(--text-main); margin-bottom: 3rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        body.light-mode .hero-content p { color: #1e293b; text-shadow: none; font-weight: 500;}
+        
+        .search-pill {
+            display: flex; align-items: center; background: var(--glass-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 60px; padding: 0.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.2); transition: all 0.3s ease;
+        }
+        .search-pill:hover, .search-pill:focus-within { border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.08); }
+        body.light-mode .search-pill { background: #ffffff; border-color: #cbd5e1; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        .search-input, .search-select { background: transparent; border: none; color: var(--text-main); font-family: var(--font-text); font-size: 1rem; padding: 1rem 1.5rem; outline: none; }
+        .search-select option { background-color: var(--bg-card); color: var(--text-main); }
+        .search-input::placeholder { color: var(--text-sec); }
+        .search-input { flex: 1; border-right: 1px solid var(--glass-border); }
+        body.light-mode .search-input { border-right: 1px solid #cbd5e1; }
+        
+        .btn-search {
+            background: var(--accent-dynamic); color: #05080f; border: none; padding: 1rem 2.5rem;
+            border-radius: 50px; font-family: var(--font-text); font-weight: 600; font-size: 1rem; transition: transform 0.3s ease;
+        }
+        .btn-search:hover { transform: scale(1.05); }
 
-        /* FOOTER LOCALIZADO */
-        footer {
-            text-align: center; padding: 50px 5%; background-color: #03050a;
-            border-top: 1px solid rgba(212, 175, 55, 0.2); color: var(--text-muted); font-size: 0.9rem;
+        /* ==========================================================================
+           7. DIRECTORIO Y PROVEEDORES
+           ========================================================================== */
+        #directorio { padding: 100px 5%; background-color: var(--bg-deep); min-height: 100vh; }
+        
+        .filters-container {
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 50px;
         }
+        .filter-btn {
+            background: transparent; border: 1px solid var(--glass-border); color: var(--text-main);
+            padding: 0.6rem 1.5rem; border-radius: 30px; font-family: var(--font-text); font-weight: 500;
+            font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        body.light-mode .filter-btn { border-color: #cbd5e1; }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent-dynamic); color: var(--accent-dynamic);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+        
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .card {
+            background-color: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 16px;
+            overflow: hidden; transition: transform 0.4s ease, box-shadow 0.4s ease; position: relative;
+            display: flex; flex-direction: column;
+        }
+        body.light-mode .card { border-color: #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card:hover {
+            transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.2);
+        }
+        body.light-mode .card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--accent-dynamic);}
+        
+        .card-img-wrapper { height: 240px; width: 100%; overflow: hidden; position: relative; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .card:hover .card-img { transform: scale(1.1); }
+        
+        .rating-badge {
+            position: absolute; top: 15px; right: 15px; background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(4px);
+            color: var(--accent-gold); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;
+            z-index: 2; border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .card-content { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-category { color: var(--accent-cyan); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 10px; }
+        .card-title { color: var(--text-main); font-family: var(--font-title); font-size: 1.4rem; margin-bottom: 8px; transition: color 0.3s ease; }
+        .card:hover .card-title { color: var(--accent-dynamic); }
+        .card-location { color: var(--text-sec); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .card-desc { color: var(--text-sec); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
+        
+        .btn-cotizar {
+            width: 100%; padding: 12px; background: transparent; border: 1px solid var(--accent-dynamic);
+            color: var(--accent-dynamic); border-radius: 8px; font-family: var(--font-text); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        .btn-cotizar:hover { background: var(--accent-dynamic); color: #05080f; }
+
+        /* ==========================================================================
+           8. HERRAMIENTAS
+           ========================================================================== */
+        #herramientas {
+            padding: 100px 5%;
+            background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-card) 100%);
+        }
+        body.light-mode #herramientas { background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-deep) 100%); }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        
+        .tool-card {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 16px;
+            padding: 40px 30px; text-align: center; transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        body.light-mode .tool-card { background: rgba(255, 255, 255, 0.6); border-color: rgba(0, 229, 255, 0.3); }
+        
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.15); }
+        .tool-icon { font-size: 3.5rem; margin-bottom: 20px; display: inline-block; }
+        
+        .tool-card h3 { font-family: var(--font-title); font-size: 1.5rem; color: var(--text-main); margin-bottom: 10px; transition: color 0.3s ease; }
+        .tool-card:hover h3 { color: var(--accent-cyan); }
+        .tool-card p { color: var(--text-sec); font-size: 0.95rem; line-height: 1.5; }
+
+        /* ==========================================================================
+           9. INSPIRACIÓN
+           ========================================================================== */
+        #inspiracion { padding: 100px 5%; background-color: var(--bg-deep); }
+
+        .masonry { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .masonry-item { position: relative; aspect-ratio: 3 / 4; border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .masonry-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .masonry-item:hover img { transform: scale(1.08); }
+        
+        .masonry-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 20px 20px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%); opacity: 0;
+            transform: translateY(30px); transition: all 0.4s ease; pointer-events: none;
+        }
+        .masonry-item:hover .masonry-overlay { opacity: 1; transform: translateY(0); }
+        
+        .masonry-overlay h4 { font-family: var(--font-title); color: var(--accent-gold); font-size: 1.3rem; margin-bottom: 5px; }
+        .masonry-overlay p { color: #f8fafc; font-size: 0.9rem; font-family: var(--font-text); }
+
+        /* ==========================================================================
+           10. FOOTER & CTA FLOTANTE (Fase 5)
+           ========================================================================== */
+        footer {
+            background-color: var(--bg-deep);
+            padding: 40px 20px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            color: var(--text-sec);
+            font-size: 0.95rem;
+            font-family: var(--font-text);
+            line-height: 1.6;
+        }
+
+        /* Botón Flotante de WhatsApp */
+        .wa-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366; /* Verde Oficial WhatsApp */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .wa-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6);
+        }
+
+        .wa-btn svg {
+            width: 35px;
+            height: 35px;
+            fill: currentColor;
+        }
+
+        /* ==========================================================================
+           11. DISEÑO RESPONSIVO (Fase 5)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            /* Paddings Generales para Móviles */
+            #directorio, #herramientas, #inspiracion { padding: 80px 20px; }
+            #main-header { padding: 0 20px; }
+            
+            /* Welcome Screen (Apilar Botones) */
+            .grid-buttons { display: flex; flex-direction: column; width: 100%; max-width: 400px; margin: 0 auto; }
+            .welcome-content h1 { font-size: 2.5rem; }
+            
+            /* Header (Ocultar Menú) */
+            .nav-link, .btn-proveedores { display: none; }
+            
+            /* Hero Section & Search Bar */
+            .hero-content h1 { font-size: 3rem; }
+            
+            .search-pill { 
+                flex-direction: column; 
+                border-radius: 20px; 
+                padding: 1rem; 
+                width: 100%;
+            }
+            .search-input, .search-select, .btn-search { 
+                width: 100%; 
+                border-right: none; 
+            }
+            .search-input { 
+                border-bottom: 1px solid var(--glass-border); 
+                margin-bottom: 0.5rem; 
+                padding: 1rem 0.5rem;
+            }
+            body.light-mode .search-input { border-bottom: 1px solid #cbd5e1; }
+            .search-select { margin-bottom: 1rem; padding: 1rem 0.5rem; }
+            
+            /* Filtros (Scroll Horizontal nativo) */
+            .filters-container { 
+                flex-wrap: nowrap; 
+                overflow-x: auto; 
+                white-space: nowrap; 
+                justify-content: flex-start;
+                padding-bottom: 15px; /* Espacio para scrollbar en mobile */
+                -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+                scrollbar-width: none; /* Ocultar scrollbar visual en Firefox */
+            }
+            .filters-container::-webkit-scrollbar { display: none; } /* Ocultar en Chrome/Safari */
+            
+            .section-title { font-size: 2.2rem; }
+        }
+
+        /* Animaciones Globales */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
     </style>
 </head>
 <body>
 
-    <div class="cursor-glow" id="cursorGlow"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
+    <!-- Elementos del Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-glow"></div>
 
-    <header>
-        <div class="logo-container">
-            <img src="logo_light.png" alt="Ruta Eventos MTY" class="logo-img logo-light">
-            <img src="logo_dark.png" alt="Ruta Eventos MTY Directo" class="logo-img logo-dark">
-        </div>
-        <div class="nav-actions">
-            <button class="btn-mode" id="btnModeToggle">Modo Claro</button>
-            <div class="nav-links">
-                <a href="#">Directorio</a>
-                <a href="#">Inspiración MTY</a>
-                <span style="color: var(--bg-deep); background: var(--gold-main); padding: 4px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">Acceso Proveedores</span>
-            </div>
-        </div>
-    </header>
-
-    <div class="hero-container">
-        <div class="hero-bg"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Crea Momentos Memorables</h1>
-            <p>El directorio premium de autoría directa en Monterrey. Conecta con artistas verificados y planea con herramientas exclusivas.</p>
-            
-            <div class="search-bar">
-                <input type="text" placeholder="¿Qué buscas? Ej. Fotografía, Música, Salón, Planner..." id="searchInput">
-                <select>
-                    <option>Todo MTY/SPGG</option>
-                    <option>San Pedro Garza García</option>
-                    <option>Carretera Nacional</option>
-                    <option>Valle de Monterrey</option>
-                </select>
-                <button class="btn-search" onclick="alert('Funcionalidad de búsqueda simulada.')">Buscar</button>
+    <!-- PANTALLA DE BIENVENIDA (Fase 1) -->
+    <div id="welcome-screen">
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <h1>Ruta Eventos MTY</h1>
+            <p>¿Qué gran historia vamos a celebrar hoy?</p>
+            <div class="grid-buttons">
+                <button class="glass-btn interactable" data-event="bodas">Bodas</button>
+                <button class="glass-btn interactable" data-event="xv_anos">XV Años</button>
+                <button class="glass-btn interactable" data-event="corporativo">Corporativo</button>
+                <button class="glass-btn interactable" data-event="bautizos_social">Bautizos / Social</button>
             </div>
         </div>
     </div>
 
-    <section>
-        <div class="filters-container">
-            <button class="filter-btn active" onclick="filtrar('todos')">Ver Todos</button>
-            <button class="filter-btn" onclick="filtrar('musica')">Música</button>
-            <button class="filter-btn" onclick="filtrar('foto')">Foto y Video</button>
-            <button class="filter-btn" onclick="filtrar('flores')">Diseño Floral</button>
-            <button class="filter-btn" onclick="filtrar('planner')">Wedding Planners</button>
-            <button class="filter-btn" onclick="filtrar('vestidos')">Vestidos</button>
-            <button class="filter-btn" onclick="filtrar('extras')">Cabinas & Extras</button>
-        </div>
-
-        <div class="proveedores">
-            <div class="grid" id="directorioGrid">
-                
-                <div class="card" data-category="musica">
-                    <div class="badge-rating">★ 5.0 Excelente</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80" alt="Dolce Ensamble" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Música para Eventos</span>
-                        <h3 class="card-title">Dolce Ensamble</h3>
-                        <div class="location">📍 Monterrey y Área Metropolitana</div>
-                        <p class="card-text">Atmósfera musical premium. Saxofón, violín y ensamble de autoría para ceremonias y recepciones de alto nivel.</p>
-                        <button class="btn-contact" onclick="contactar('Dolce Ensamble')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="foto">
-                    <div class="badge-rating">★ 4.9 Cinematográfico</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=80" alt="Foto" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Agencia Cinematográfica</span>
-                        <h3 class="card-title">Luz y Arte Studio</h3>
-                        <div class="location">📍 San Pedro Garza García</div>
-                        <p class="card-text">Narrativas visuales que trascienden. Cobertura cinematográfica integral en 4K y drones para capturar cada emoción.</p>
-                        <button class="btn-contact" onclick="contactar('Luz y Arte Studio')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="flores">
-                    <div class="badge-rating">★ 5.0 Destacado</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80" alt="Flores" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Diseño Floral</span>
-                        <h3 class="card-title">Botánica Floral MTY</h3>
-                        <div class="location">📍 Santiago, N.L.</div>
-                        <p class="card-text">Diseño floral espectacular y localizado. Creamos escenarios mágicos con arcos y centros de mesa monumentales.</p>
-                        <button class="btn-contact" onclick="contactar('Botánica Floral')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="planner">
-                    <div class="badge-rating">★ 5.0 Experta</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="Planner" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Wedding Planner SPGG</span>
-                        <h3 class="card-title">Mágica Esencia Planners</h3>
-                        <div class="location">📍 Monterrey/San Pedro</div>
-                        <p class="card-text">Coordinación y diseño integral de eventos destino y locales. Tú disfruta, nosotros materializamos tu visión.</p>
-                        <button class="btn-contact" onclick="contactar('Mágica Esencia Planners')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="vestidos">
-                    <div class="badge-rating">★ 4.8 Boutique</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1595911417246-13d87532faaf?auto=format&fit=crop&w=800&q=80" alt="Vestidos" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Alta Costura Novias y XV</span>
-                        <h3 class="card-title">Atelier Novias SPGG</h3>
-                        <div class="location">📍 Calzada del Valle</div>
-                        <p class="card-text">Boutique exclusiva de alta costura. Vestidos importados y entalles a la medida para lucir espectacular en tu día.</p>
-                        <button class="btn-contact" onclick="contactar('Atelier Novias')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="musica">
-                    <div class="badge-rating">★ 4.9 Show</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80" alt="Banda" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Banda Versátil MTY</span>
-                        <h3 class="card-title">Sinergia Versátil</h3>
-                        <div class="location">📍 Todo Monterrey</div>
-                        <p class="card-text">Show interactivo garantizado. Pista llena con zanqueros, pirotecnia y el mejor repertorio para bodas y XV años.</p>
-                        <button class="btn-contact" onclick="contactar('Sinergia Versátil')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-
-                <div class="card" data-category="extras">
-                    <div class="badge-rating">★ 4.9 Entretenimiento</div>
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1530103862676-de8892bc952f?auto=format&fit=crop&w=800&q=80" alt="Cabina" class="card-img">
-                    </div>
-                    <div class="card-content">
-                        <span class="category">Cabinas Fotográficas MTY</span>
-                        <h3 class="card-title">SmileBox 360 MTY</h3>
-                        <div class="location">📍 Zona Metropolitana</div>
-                        <p class="card-text">Diversión asegurada con plataforma 360, espejos mágicos y cabinas fotográficas impresas al instante.</p>
-                        <button class="btn-contact" onclick="contactar('SmileBox 360 MTY')">Solicitar Presupuesto Directo</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="planning-tools">
-        <h2 class="section-title">Planeación <span>Sin Esfuerzo</span></h2>
-        <p class="editorial-text" style="color: var(--text-muted); margin-bottom: 30px;">Herramientas digitales exclusivas para el mercado local regiomontano.</p>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="main-app">
         
-        <div class="tools-grid">
-            <div class="tool-card">
-                <span class="tool-icon">💰</span>
-                <h3>Cotizador Presupuestal</h3>
-                <p>Calcula de forma inteligente y directa los costos reales de cada proveedor en MTY.</p>
-            </div>
-            <div class="tool-card">
-                <span class="tool-icon">🗓️</span>
-                <h3>Lista de Invitados SPGG</h3>
-                <p>Gestiona y confirma asistencias, asigna mesas con facilidad desde tu celular.</p>
-            </div>
-            <div class="tool-card">
-                <span class="tool-icon">📱</span>
-                <h3>Checklist (Cronograma)</h3>
-                <p>El Checklist definitivo mes a mes para que nada se te pase por alto antes del gran día.</p>
-            </div>
-        </div>
-    </section>
+        <!-- HEADER (Fase 2) -->
+        <header id="main-header">
+            <a href="#" class="logo interactable">Ruta<span>Eventos</span></a>
+            <nav class="nav-menu">
+                <a href="#directorio" class="nav-link interactable" id="nav-link-1">Directorio</a>
+                <a href="#inspiracion" class="nav-link interactable" id="nav-link-2">Inspiración</a>
+                <a href="#herramientas" class="nav-link interactable">Herramientas</a>
+                <button class="btn-proveedores interactable">Acceso Proveedores</button>
+                <button class="theme-toggle interactable" id="theme-btn" title="Cambiar Tema">☼</button>
+            </nav>
+        </header>
 
-    <section class="inspiration">
-        <h2 class="section-title">Bodas y Eventos <span>Reales en MTY</span></h2>
-        <p class="editorial-text" style="color: var(--text-muted); margin-bottom: 40px; text-align: center;">Descubre la magia creada por nuestros artistas locales en eventos de autoría.</p>
+        <!-- HERO SECTION (Fase 2) -->
+        <section id="hero">
+            <div class="hero-bg" id="hero-bg-image"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Crea Momentos Memorables</h1>
+                <p>Encuentra los mejores proveedores, locaciones y músicos en Monterrey para tu gran día.</p>
+                <form class="search-pill" onsubmit="event.preventDefault();">
+                    <input type="text" class="search-input interactable" placeholder="¿Qué servicio buscas? (Ej. Saxofonista, Salón...)">
+                    <select class="search-select interactable">
+                        <option value="todo">Todo MTY/SPGG</option>
+                        <option value="san_pedro">San Pedro Garza García</option>
+                        <option value="carretera">Carretera Nacional</option>
+                        <option value="valle">Valle de Monterrey</option>
+                    </select>
+                    <button type="submit" class="btn-search interactable">Buscar</button>
+                </form>
+            </div>
+        </section>
         
-        <div class="masonry">
-            <div class="masonry-item">
-                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="Boda 1 MTY">
-                <div class="masonry-overlay">
-                    <h4>Boda en Carretera Nacional</h4>
-                    <p>Evento real. Diseño floral monumental por [Etiquetar Florista del Grupo].</p>
-                </div>
+        <!-- DIRECTORIO PREMIUM (Fase 3) -->
+        <section id="directorio">
+            <div class="section-header">
+                <h2>Directorio <span>Premium</span></h2>
+                <p>Los mejores proveedores, listos para tu evento.</p>
             </div>
-            <div class="masonry-item">
-                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80" alt="XV MTY">
-                <div class="masonry-overlay">
-                    <h4>XV Años en San Pedro</h4>
-                    <p>Celebración real. Cobertura de autoría por [Etiquetar Fotógrafo del Grupo].</p>
-                </div>
+            
+            <div class="filters-container">
+                <button class="filter-btn active interactable" data-filter="todos">Todos</button>
+                <button class="filter-btn interactable" data-filter="musica">Música</button>
+                <button class="filter-btn interactable" data-filter="foto">Foto & Video</button>
+                <button class="filter-btn interactable" data-filter="planners">Planners</button>
+                <button class="filter-btn interactable" data-filter="floral">Diseño Floral</button>
+                <button class="filter-btn interactable" data-filter="vestidos">Vestidos</button>
             </div>
-            <div class="masonry-item">
-                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="Boda 3 MTY">
-                <div class="masonry-overlay">
-                    <h4>Civil Íntimo SPGG</h4>
-                    <p>Reunión real. Ambientación musical premium por [Tu Negocio Etiquetado].</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <footer>
-        <p>&copy; 2026 Directorio Premium de Eventos MTY/SPGG. Proyecto de Colaboración Estratégica locally sourced.</p>
-    </footer>
+            <div id="proveedores-grid" class="grid">
+                <!-- Tarjetas inyectadas por JS -->
+            </div>
+        </section>
+
+        <!-- HERRAMIENTAS (Fase 4) -->
+        <section id="herramientas">
+            <div class="section-header">
+                <h2>Planeación <span>Sin Esfuerzo</span></h2>
+                <p>Nuestras herramientas exclusivas para organizar tu evento paso a paso.</p>
+            </div>
+
+            <div class="tools-grid">
+                <article class="tool-card interactable">
+                    <div class="tool-icon">💰</div>
+                    <h3 id="tool-title-1">Presupuesto Nupcial</h3>
+                    <p id="tool-desc-1">Calcula y administra cada peso invertido en tu evento sin complicaciones.</p>
+                </article>
+                <article class="tool-card interactable">
+                    <div class="tool-icon">🗓️</div>
+                    <h3 id="tool-title-2">Lista de Invitados</h3>
+                    <p id="tool-desc-2">Organiza mesas, confirmaciones y dietas especiales de todos tus invitados.</p>
+                </article>
+                <article class="tool-card interactable">
+                    <div class="tool-icon">📱</div>
+                    <h3 id="tool-title-3">Checklist de la Novia</h3>
+                    <p id="tool-desc-3">Una agenda detallada mes a mes para que no se te pase ni un solo detalle.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- INSPIRACIÓN (Fase 4) -->
+        <section id="inspiracion">
+            <div class="section-header">
+                <h2>Eventos <span>Reales en MTY</span></h2>
+                <p>Descubre cómo se ven los sueños hechos realidad con nuestros proveedores.</p>
+            </div>
+
+            <div class="masonry">
+                <div class="masonry-item interactable">
+                    <img id="insp-img-1" src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop" alt="Inspiración 1">
+                    <div class="masonry-overlay">
+                        <h4 id="insp-title-1">Boda en Club Campestre</h4>
+                        <p id="insp-desc-1">Diseño floral clásico y recepción al atardecer.</p>
+                    </div>
+                </div>
+                <div class="masonry-item interactable">
+                    <img id="insp-img-2" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop" alt="Inspiración 2">
+                    <div class="masonry-overlay">
+                        <h4 id="insp-title-2">Recepción en Chipinque</h4>
+                        <p id="insp-desc-2">Elegancia natural en medio del bosque con música en vivo.</p>
+                    </div>
+                </div>
+                <div class="masonry-item interactable">
+                    <img id="insp-img-3" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" alt="Inspiración 3">
+                    <div class="masonry-overlay">
+                        <h4 id="insp-title-3">Cena en Horno3</h4>
+                        <p id="insp-desc-3">Un toque industrial y sofisticado para la celebración.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FOOTER & CTA FLOTANTE (Fase 5) -->
+        <footer>
+            <p>&copy; 2026 Ruta Eventos. Directorio Premium de Monterrey y SPGG. <br>Proyecto de Colaboración Estratégica - Grupo Fundador Beta.</p>
+        </footer>
+
+        <!-- Botón de WhatsApp SVG Integrado -->
+        <a href="https://wa.me/5218100000000" class="wa-btn interactable" target="_blank" title="Contáctanos por WhatsApp">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+            </svg>
+        </a>
+
+    </div>
 
     <script>
-        // 1. Efecto de Cursor Personalizado Avanzado
-        const cursorDot = document.getElementById('cursorDot');
-        const cursorGlow = document.getElementById('cursorGlow');
-        
-        document.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
+        document.addEventListener('DOMContentLoaded', () => {
             
-            // Punto principal rápido
-            cursorDot.style.left = posX + 'px';
-            cursorDot.style.top = posY + 'px';
+            /* --- A. LÓGICA DEL CURSOR --- */
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorGlow = document.querySelector('.cursor-glow');
             
-            // Resplandor suave con retraso
-            cursorGlow.style.left = posX + 'px';
-            cursorGlow.style.top = posY + 'px';
-        });
-
-        // Interacción: Agrandar resplandor al hover
-        const interactables = document.querySelectorAll('a, button, .card');
-        interactables.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '60px';
-                cursorGlow.style.height = '60px';
-                cursorGlow.style.background = 'radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(0,0,0,0) 70%)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '400px';
-                cursorGlow.style.height = '400px';
-                cursorGlow.style.background = 'radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(0,0,0,0) 70%)';
-            });
-        });
-
-        // 2. Lógica de Cambio de Modo Claro/Oscuro & Logotipos
-        const body = document.body;
-        const btnModeToggle = document.getElementById('btnModeToggle');
-        
-        // Predeterminado: Modo Oscuro. Si hay cookie o preferencia, aplicar modo claro.
-        if (localStorage.getItem('mode') === 'light') {
-            applyLightMode();
-        }
-
-        btnModeToggle.addEventListener('click', () => {
-            if (body.classList.contains('mode-light')) {
-                applyDarkMode();
-            } else {
-                applyLightMode();
+            function initCursorHover() {
+                document.querySelectorAll('.interactable, a, button, input, select, .card, .tool-card, .masonry-item').forEach(el => {
+                    el.removeEventListener('mouseenter', addHover);
+                    el.removeEventListener('mouseleave', removeHover);
+                    el.addEventListener('mouseenter', addHover);
+                    el.addEventListener('mouseleave', removeHover);
+                });
             }
-        });
+            const addHover = () => cursorDot.classList.add('hover-active');
+            const removeHover = () => cursorDot.classList.remove('hover-active');
 
-        function applyLightMode() {
-            body.classList.add('mode-light');
-            btnModeToggle.innerText = 'Modo Oscuro';
-            btnModeToggle.style.background = 'rgba(0,0,0,0.08)';
-            btnModeToggle.style.color = 'black';
-            localStorage.setItem('mode', 'light');
-        }
+            let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+            let dotX = mouseX, dotY = mouseY, glowX = mouseX, glowY = mouseY;
+            
+            // Optimización para dispositivos móviles: Ocultar cursor si es táctil
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (isTouchDevice) {
+                cursorDot.style.display = 'none';
+                cursorGlow.style.display = 'none';
+            } else {
+                window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
 
-        function applyDarkMode() {
-            body.classList.remove('mode-light');
-            btnModeToggle.innerText = 'Modo Claro';
-            btnModeToggle.style.background = 'rgba(255,255,255,0.05)';
-            btnModeToggle.style.color = 'white';
-            localStorage.setItem('mode', 'dark');
-        }
+                function animateCursor() {
+                    dotX += (mouseX - dotX) * 0.5; dotY += (mouseY - dotY) * 0.5;
+                    glowX += (mouseX - glowX) * 0.15; glowY += (mouseY - glowY) * 0.15;
+                    cursorDot.style.left = `${dotX}px`; cursorDot.style.top = `${dotY}px`;
+                    cursorGlow.style.left = `${glowX}px`; cursorGlow.style.top = `${glowY}px`;
+                    requestAnimationFrame(animateCursor);
+                }
+                animateCursor();
+                initCursorHover();
+            }
 
-        // 3. Simulación de Contacto Directo a WhatsApp
-        function contactar(nombreProveedor) {
-            alert(`¡Simulación de Contacto Directo MTY!\n\nAl hacer clic aquí, se abrirá WhatsApp con el siguiente mensaje:\n\n"Hola, vi tu perfil verificado en el Directorio Premium Ruta Eventos MTY. Me interesa contactar con '${nombreProveedor}' para cotizar una fecha."`);
-        }
+            /* --- B. BASES DE DATOS MOCKUP (Fase 3 y 4) --- */
+            const proveedoresData = [
+                { id: 1, nombre: "Dolce Ensamble", categoria: "musica", tiposEvento: ["bodas", "xv_anos", "corporativo", "bautizos_social"], imagen: "https://images.unsplash.com/photo-1573032731006-0cecb8274712?q=80&w=2070&auto=format&fit=crop", rating: "5.0", ubicacion: "Monterrey / SPGG", descripcion: "Elegancia musical con saxofón y violín. Creamos atmósferas inolvidables para cenas, bodas y eventos exclusivos." },
+                { id: 2, nombre: "Lumina Studio", categoria: "foto", tiposEvento: ["bodas", "xv_anos", "bautizos_social"], imagen: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=2070&auto=format&fit=crop", rating: "4.9", ubicacion: "San Pedro Garza García", descripcion: "Capturamos emociones genuinas con un estilo cinematográfico y atemporal. Cobertura completa de tu evento." },
+                { id: 3, nombre: "Grand Eventos By Sofía", categoria: "planners", tiposEvento: ["bodas", "corporativo"], imagen: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop", rating: "5.0", ubicacion: "Carretera Nacional", descripcion: "Diseño, planeación y coordinación de bodas de lujo. Nos encargamos de que tu único trabajo sea disfrutar." },
+                { id: 4, nombre: "Botanica Floral", categoria: "floral", tiposEvento: ["bodas", "xv_anos", "bautizos_social"], imagen: "https://images.unsplash.com/photo-1560249723-1d0961b7b75b?q=80&w=2070&auto=format&fit=crop", rating: "4.8", ubicacion: "Valle de Monterrey", descripcion: "Diseño floral vanguardista. Transformamos espacios ordinarios en jardines de ensueño y sofisticación." },
+                { id: 5, nombre: "Boutique L'Amour", categoria: "vestidos", tiposEvento: ["bodas", "xv_anos"], imagen: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1983&auto=format&fit=crop", rating: "4.9", ubicacion: "San Pedro Garza García", descripcion: "Vestidos de novia y XV años de diseñadores internacionales. Asesoría de imagen personalizada." },
+                { id: 6, nombre: "Beats & Lights DJ", categoria: "musica", tiposEvento: ["xv_anos", "corporativo", "bodas"], imagen: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop", rating: "4.7", ubicacion: "Monterrey Centro", descripcion: "Audio, iluminación inteligente y el mejor ambiente para mantener la pista llena toda la noche." }
+            ];
 
-        // 4. Funcionalidad de Filtrado Mágico (Dinamismo en Vivo)
-        function filtrar(categoria) {
-            const botones = document.querySelectorAll('.filter-btn');
-            botones.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            const datosHerramientas = {
+                'bodas': [
+                    { titulo: 'Presupuesto Nupcial', desc: 'Calcula y administra cada peso invertido en tu evento sin complicaciones.' },
+                    { titulo: 'Lista de Invitados', desc: 'Organiza mesas, confirmaciones y dietas especiales de tus familiares.' },
+                    { titulo: 'Checklist de la Novia', desc: 'Una agenda detallada mes a mes para que no se te pase ni un solo detalle.' }
+                ],
+                'xv_anos': [
+                    { titulo: 'Presupuesto XV', desc: 'Lleva el control exacto de vestidos, viajes y fiesta.' },
+                    { titulo: 'Invitados VIP', desc: 'Organiza a tus amigos de la escuela, chambelanes y familia.' },
+                    { titulo: 'Checklist Quinceañera', desc: 'Pruebas de vestido, coreografía y todos los ensayos al día.' }
+                ],
+                'corporativo': [
+                    { titulo: 'Cotizador de Banquete', desc: 'Cálculo automatizado por persona para cenas y congresos.' },
+                    { titulo: 'Logística Técnica', desc: 'Control de proveedores de pantallas, audio e iluminación.' },
+                    { titulo: 'Facturación / ROI', desc: 'Gestiona la inversión corporativa y requerimientos fiscales.' }
+                ],
+                'bautizos_social': [
+                    { titulo: 'Presupuesto Familiar', desc: 'Costos de salón, arreglos y comida bajo control.' },
+                    { titulo: 'Gestión de Mesas', desc: 'Acomoda a las familias e invitados de forma sencilla.' },
+                    { titulo: 'Checklist del Evento', desc: 'Todo lo necesario para un bautizo, primera comunión o baby shower.' }
+                ]
+            };
 
-            const tarjetas = document.querySelectorAll('.card');
-            tarjetas.forEach(tarjeta => {
-                if (categoria === 'todos') {
-                    tarjeta.style.display = 'block';
-                    tarjeta.style.animation = 'fadeIn 0.5s ease forwards';
+            const datosInspiracion = {
+                'bodas': [
+                    { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop', titulo: 'Boda en Club Campestre', desc: 'Diseño floral clásico y recepción al atardecer.' },
+                    { img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop', titulo: 'Recepción en Chipinque', desc: 'Elegancia natural en medio del bosque.' },
+                    { img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop', titulo: 'Cena en Horno3', desc: 'Un toque industrial y sofisticado para la celebración.' }
+                ],
+                'xv_anos': [
+                    { img: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=2070&auto=format&fit=crop', titulo: 'Fiesta Neón SPGG', desc: 'Iluminación robótica y pantallas LED.' },
+                    { img: 'https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?q=80&w=2070&auto=format&fit=crop', titulo: 'Gala Estilo Princesa', desc: 'Vestido de diseñador y decoración romántica.' },
+                    { img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop', titulo: 'XV en Terraza', desc: 'Música de DJ y ambiente vibrante al aire libre.' }
+                ],
+                'corporativo': [
+                    { img: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop', titulo: 'Congreso en Cintermex', desc: 'Montaje tipo auditorio con tecnología de punta.' },
+                    { img: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2069&auto=format&fit=crop', titulo: 'Cena de Fin de Año', desc: 'Gala corporativa con música de ensamble.' },
+                    { img: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1974&auto=format&fit=crop', titulo: 'Lanzamiento de Marca', desc: 'Activaciones dinámicas y networking en San Pedro.' }
+                ],
+                'bautizos_social': [
+                    { img: 'https://images.unsplash.com/photo-1530103862676-de8892ebe829?q=80&w=2070&auto=format&fit=crop', titulo: 'Mesa de Postres', desc: 'Detalles dulces con decoración temática.' },
+                    { img: 'https://images.unsplash.com/photo-1519671482749-fd0987ab7e2b?q=80&w=2070&auto=format&fit=crop', titulo: 'Jardín de Eventos', desc: 'Celebración familiar al mediodía.' },
+                    { img: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2098&auto=format&fit=crop', titulo: 'Baby Shower Chic', desc: 'Diseño floral minimalista en colores pastel.' }
+                ]
+            };
+
+            let eventoActual = 'bodas'; 
+
+            /* --- C. LÓGICA DE RENDERIZADO GRID (Fase 3) --- */
+            function renderizarProveedores(eventoActivo, filtroCategoria) {
+                const grid = document.getElementById('proveedores-grid');
+                grid.innerHTML = ''; 
+                
+                const proveedoresFiltrados = proveedoresData.filter(prov => {
+                    return prov.tiposEvento.includes(eventoActivo) && (filtroCategoria === 'todos' || prov.categoria === filtroCategoria);
+                });
+
+                if (proveedoresFiltrados.length === 0) {
+                    grid.innerHTML = `<p style="color: var(--text-sec); text-align: center; grid-column: 1/-1;">Pronto añadiremos más proveedores exclusivos para esta categoría.</p>`;
+                    return;
+                }
+
+                proveedoresFiltrados.forEach((prov, index) => {
+                    const nombresCat = { 'musica': 'Música', 'foto': 'Foto & Video', 'planners': 'Event Planner', 'floral': 'Arte Floral', 'vestidos': 'Boutique' };
+                    const catName = nombresCat[prov.categoria] || prov.categoria;
+                    const cardHTML = `
+                        <article class="card interactable" style="animation: fadeIn 0.6s ease forwards ${index * 0.1}s; opacity: 0;">
+                            <div class="card-img-wrapper">
+                                <span class="rating-badge">★ ${prov.rating}</span>
+                                <img src="${prov.imagen}" alt="${prov.nombre}" class="card-img" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">${catName}</span>
+                                <h3 class="card-title">${prov.nombre}</h3>
+                                <p class="card-location">📍 ${prov.ubicacion}</p>
+                                <p class="card-desc">${prov.descripcion}</p>
+                                <button class="btn-cotizar interactable">Cotizar por WhatsApp</button>
+                            </div>
+                        </article>
+                    `;
+                    grid.insertAdjacentHTML('beforeend', cardHTML);
+                });
+                
+                if(!isTouchDevice) setTimeout(initCursorHover, 100);
+            }
+
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderizarProveedores(eventoActual, this.getAttribute('data-filter'));
+                });
+            });
+
+            /* --- D. LÓGICA DE GATEKEEPER Y TRANSICIÓN --- */
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const mainApp = document.getElementById('main-app');
+            const mainHeader = document.getElementById('main-header');
+            const glassButtons = document.querySelectorAll('.welcome-content .glass-btn');
+
+            glassButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const eventType = this.getAttribute('data-event');
+                    eventoActual = eventType; 
+                    
+                    renderizarSitio(eventType);
+                    
+                    welcomeScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        welcomeScreen.style.display = 'none';
+                        document.body.style.overflow = 'auto'; // Reactivamos el scroll
+                        mainApp.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            mainApp.style.opacity = '1';
+                            mainHeader.style.transform = 'translateY(0)';
+                        }, 50);
+                    }, 600);
+                });
+            });
+
+            /* --- E. LÓGICA DINÁMICA DE LA APLICACIÓN --- */
+            function renderizarSitio(tipoEvento) {
+                const rootCss = document.documentElement;
+                const heroBg = document.getElementById('hero-bg-image');
+                const navLink1 = document.getElementById('nav-link-1');
+                const navLink2 = document.getElementById('nav-link-2');
+
+                const configEventos = {
+                    'bodas': { bgImage: 'url("https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop")', colorAccent: '#d4af37', textNav1: 'Bodas Reales', textNav2: 'Inspiración Nupcial' },
+                    'xv_anos': { bgImage: 'url("https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=2070&auto=format&fit=crop")', colorAccent: '#ff007f', textNav1: 'Mis XV Reales', textNav2: 'Ideas Neón' },
+                    'corporativo': { bgImage: 'url("https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2069&auto=format&fit=crop")', colorAccent: '#00e5ff', textNav1: 'Eventos Top', textNav2: 'Venues Empresariales' },
+                    'bautizos_social': { bgImage: 'url("https://images.unsplash.com/photo-1530103862676-de8892ebe829?q=80&w=2070&auto=format&fit=crop")', colorAccent: '#a855f7', textNav1: 'Celebraciones', textNav2: 'Mesa de Postres' }
+                };
+
+                const data = configEventos[tipoEvento] || configEventos['bodas'];
+                rootCss.style.setProperty('--accent-dynamic', data.colorAccent);
+                heroBg.style.backgroundImage = data.bgImage;
+                navLink1.innerText = data.textNav1;
+                navLink2.innerText = data.textNav2;
+
+                filterBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn[data-filter="todos"]').classList.add('active');
+                renderizarProveedores(tipoEvento, 'todos');
+
+                const herramientas = datosHerramientas[tipoEvento] || datosHerramientas['bodas'];
+                for(let i=0; i<3; i++) {
+                    document.getElementById(`tool-title-${i+1}`).innerText = herramientas[i].titulo;
+                    document.getElementById(`tool-desc-${i+1}`).innerText = herramientas[i].desc;
+                }
+
+                const inspiracion = datosInspiracion[tipoEvento] || datosInspiracion['bodas'];
+                for(let i=0; i<3; i++) {
+                    document.getElementById(`insp-img-${i+1}`).src = inspiracion[i].img;
+                    document.getElementById(`insp-title-${i+1}`).innerText = inspiracion[i].titulo;
+                    document.getElementById(`insp-desc-${i+1}`).innerText = inspiracion[i].desc;
+                }
+            }
+
+            /* --- F. LÓGICA DEL MODO CLARO/OSCURO --- */
+            const themeBtn = document.getElementById('theme-btn');
+            let isLightMode = false;
+
+            themeBtn.addEventListener('click', () => {
+                isLightMode = !isLightMode;
+                if (isLightMode) {
+                    document.body.classList.add('light-mode');
+                    themeBtn.innerText = '☾';
                 } else {
-                    if (tarjeta.getAttribute('data-category') === categoria) {
-                        tarjeta.style.display = 'block';
-                        tarjeta.style.animation = 'fadeIn 0.5s ease forwards';
-                    } else {
-                        tarjeta.style.display = 'none';
-                    }
+                    document.body.classList.remove('light-mode');
+                    themeBtn.innerText = '☼';
                 }
             });
-        }
+
+        });
     </script>
 </body>
 </html>
