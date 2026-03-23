@@ -782,6 +782,65 @@
                 }
             });
 
+            /* --- G. LÓGICA DEL DASHBOARD DE PROVEEDORES --- */
+            const btnProveedoresDesktop = document.getElementById('btn-proveedores-desktop');
+            const btnProveedoresMobile = document.getElementById('provider-btn-mobile');
+            const providerDashboard = document.getElementById('provider-dashboard');
+            const sectionsToHide = ['hero', 'directorio', 'herramientas', 'inspiracion'];
+            let isDashboardOpen = false;
+
+            function toggleDashboard(e) {
+                e.preventDefault();
+                isDashboardOpen = !isDashboardOpen;
+                
+                if(isDashboardOpen) {
+                    // Ocultar landing page
+                    sectionsToHide.forEach(id => document.getElementById(id).style.display = 'none');
+                    
+                    // Mostrar dashboard responsivo
+                    providerDashboard.style.display = window.innerWidth <= 768 ? 'flex' : 'grid';
+                    if (window.innerWidth <= 768) providerDashboard.style.flexDirection = 'column';
+                    
+                    // Animación suave
+                    setTimeout(() => providerDashboard.style.opacity = '1', 50);
+                    
+                    // Cambiar apariencia de los botones
+                    if(btnProveedoresDesktop) {
+                        btnProveedoresDesktop.innerText = 'Volver al Inicio';
+                        btnProveedoresDesktop.style.backgroundColor = 'transparent';
+                        btnProveedoresDesktop.style.border = '1px solid var(--accent-dynamic)';
+                        btnProveedoresDesktop.style.color = 'var(--accent-dynamic)';
+                    }
+                    if(btnProveedoresMobile) btnProveedoresMobile.innerText = '🏠'; // Cambiar icono a casa
+                    
+                    // Re-inicializar eventos del cursor para los botones nuevos del dashboard
+                    if(!isTouchDevice) setTimeout(initCursorHover, 100);
+                } else {
+                    // Ocultar dashboard
+                    providerDashboard.style.opacity = '0';
+                    setTimeout(() => {
+                        providerDashboard.style.display = 'none';
+                        // Restaurar landing page
+                        document.getElementById('hero').style.display = 'flex';
+                        document.getElementById('directorio').style.display = 'block';
+                        document.getElementById('herramientas').style.display = 'block';
+                        document.getElementById('inspiracion').style.display = 'block';
+                    }, 400);
+                    
+                    // Restaurar botones a su estado original
+                    if(btnProveedoresDesktop) {
+                        btnProveedoresDesktop.innerText = 'Acceso Proveedores';
+                        btnProveedoresDesktop.style.backgroundColor = 'var(--accent-dynamic)';
+                        btnProveedoresDesktop.style.border = 'none';
+                        btnProveedoresDesktop.style.color = '#05080f';
+                    }
+                    if(btnProveedoresMobile) btnProveedoresMobile.innerText = '👤';
+                }
+            }
+
+            if(btnProveedoresDesktop) btnProveedoresDesktop.addEventListener('click', toggleDashboard);
+            if(btnProveedoresMobile) btnProveedoresMobile.addEventListener('click', toggleDashboard);
+
         });
     </script>
 </body>
