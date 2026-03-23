@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruta Eventos MTY | Directorio Premium de Autoría Directa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES DE COLOR Y PALETAS --- */
+        :root {
+            /* Paleta base (Modo Oscuro Predeterminado - "Gala Premium") */
+            --bg-deep: #05080f; /* Negro Ónix Profundo */
+            --bg-card: #0c121e; /* Azul Medianoche Profundo para tarjetas */
+            --text-primary: #f8fafc; /* Texto claro */
+            --text-muted: #94a3b8; /* Texto apagado */
+            --gold-main: #d4af37; /* Oro Metálico */
+            --gold-hover: #f1c40f; /* Oro brillante para hover */
+            --cyan-tech: #00e5ff; /* Turquesa/Cian para acentos modernos */
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-glow: rgba(0, 229, 255, 0.3);
+            --hero-gradient: linear-gradient(rgba(5, 8, 15, 0.7), rgba(5, 8, 15, 0.95));
+        }
+
+        /* Paleta alternativa (Modo Normal / Claro) */
+        .mode-light {
+            --bg-deep: #f9fafb; /* Fondo claro */
+            --bg-card: #ffffff; /* Tarjetas blancas */
+            --text-primary: #111827; /* Texto oscuro */
+            --text-muted: #6b7280; /* Texto apagado */
+            --border-subtle: rgba(0, 0, 0, 0.05);
+            --hero-gradient: linear-gradient(rgba(249, 250, 251, 0.8), rgba(249, 250, 251, 0.95));
+        }
+
+        /* --- ESTILOS GLOBALES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Oculta el cursor por defecto */ }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        h1, h2, h3, .editorial-text { font-family: 'Playfair Display', serif; }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+
+        /* --- EFECTO DE CURSOR PERSONALIZADO --- */
+        .cursor-glow {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--gold-main); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 10000;
+            transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--gold-main); transition: transform 0.1s;
+        }
+
+        /* --- HEADER & NAVEGACIÓN DINÁMICA --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 5%;
+            background: rgba(10, 15, 26, 0.8); position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(12px);
+            transition: background 0.4s ease;
+        }
+
+        .mode-light header { background: rgba(249, 250, 251, 0.8); }
+
+        .logo-container { height: 50px; display: flex; align-items: center; }
+        .logo-img { height: 100%; object-fit: contain; transition: opacity 0.4s ease; }
+        
+        /* Lógica de ocultar/mostrar logos según el modo */
+        .mode-light .logo-dark { display: none; }
+        .mode-light .logo-light { display: block; }
+        body:not(.mode-light) .logo-light { display: none; }
+        body:not(.mode-light) .logo-dark { display: block; }
+
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        
+        /* Botón de cambio de modo */
+        .btn-mode {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-primary); padding: 8px 15px; border-radius: 20px;
+            cursor: pointer; font-size: 0.8rem; font-weight: 500; font-family: 'Montserrat', sans-serif;
+        }
+        .mode-light .btn-mode { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; }
+        .nav-links a:hover { color: var(--cyan-tech); }
+
+        /* --- HERO CON EFECTO KEN BURNS (Banner Cinematográfico) --- */
+        .hero-container { position: relative; height: 85vh; width: 100%; overflow: hidden; margin-top: 70px; }
+        
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80') center/cover;
+            animation: kenBurns 30s infinite alternate ease-in-out; z-index: 1;
+        }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--hero-gradient); z-index: 2; transition: background 0.4s ease; }
+
+        @keyframes kenBurns {
+            0% { transform: scale(1); background-position: center; }
+            100% { transform: scale(1.15); background-position: top right; }
+        }
+
+        .hero-content {
+            position: relative; z-index: 3; height: 100%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 0 20px;
+        }
+        .hero-content h1 { font-size: 4.8rem; color: var(--gold-main); margin-bottom: 10px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        .hero-content p { font-size: 1.35rem; max-width: 750px; margin-bottom: 45px; color: #cbd5e1; }
+
+        /* --- BUSCADOR HERO INTELIGENTE --- */
+        .search-bar {
+            background: rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 50px;
+            display: flex; gap: 10px; border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px); width: 100%; max-width: 880px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: transform 0.3s;
+        }
+        .mode-light .search-bar { background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.1); }
+        .search-bar:hover { transform: translateY(-3px); border-color: rgba(212, 175, 55, 0.6); }
+
+        .search-bar input, .search-bar select {
+            background: transparent; border: none; color: white; padding: 15px 30px;
+            font-size: 1rem; outline: none; flex: 1; font-family: 'Montserrat', sans-serif;
+        }
+        .mode-light .search-bar input, .mode-light .search-bar select { color: black; }
+        .search-bar select option { background: var(--bg-deep); color: white; }
+
+        .btn-search {
+            background: var(--gold-main); color: var(--bg-deep); border: none; padding: 15px 45px;
+            border-radius: 50px; font-weight: 700; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;
+        }
+        .btn-search:hover { background: var(--gold-hover); box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
+
+        /* --- FILTROS RÁPIDOS PILLS (Dinamismo en Vivo) --- */
+        .filters-container { padding: 50px 5%; text-align: center; margin-bottom: 40px; border-bottom: 1px solid var(--border-subtle); }
+        .filter-btn {
+            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary);
+            padding: 10px 25px; border-radius: 30px; margin: 6px; transition: all 0.3s; font-size: 0.9rem; font-weight: 500;
+        }
+        .mode-light .filter-btn { border: 1px solid rgba(0,0,0,0.08); }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--cyan-tech); color: var(--cyan-tech); background: rgba(0, 229, 255, 0.1); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+
+        /* --- GRID DE PROVEEDORES (Directorio Premium de Autoría) --- */
+        .proveedores { padding: 60px 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 35px; }
+
+        .card {
+            background-color: var(--bg-card); border-radius: 18px; overflow: hidden;
+            border: 1px solid var(--border-subtle); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .mode-light .card { border: 1px solid rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-12px); box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(0, 229, 255, 0.1); border-color: var(--gold-main); }
+
+        .card-img-wrapper { overflow: hidden; height: 250px; position: relative; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .card:hover .card-img { transform: scale(1.1); }
+
+        .badge-rating {
+            position: absolute; top: 15px; right: 15px; background: rgba(10, 15, 26, 0.85);
+            color: var(--gold-main); padding: 7px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; backdrop-filter: blur(5px); z-index: 10; border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .card-content { padding: 30px; }
+        .category { color: var(--cyan-tech); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px; display: inline-block; }
+        .card-title { font-size: 1.65rem; color: #fff; margin-bottom: 10px; transition: color 0.3s; }
+        .mode-light .card-title { color: black; }
+        .card:hover .card-title { color: var(--gold-main); }
+        .location { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .card-text { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6; }
+
+        /* CTA DIRECTO A WHATSAPP */
+        .btn-contact {
+            display: block; width: 100%; padding: 14px; background: rgba(255,255,255,0.03); color: var(--gold-main);
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; text-align: center;
+            font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+        }
+        .mode-light .btn-contact { background: rgba(0,0,0,0.03); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .btn-contact:hover { background: var(--gold-main); color: var(--bg-deep); }
+
+        /* --- INSPIRACIÓN locally sourced (Bodas Reales en MTY/SPGG) --- */
+        .inspiration { background-color: var(--bg-deep); padding: 80px 5%; border-top: 1px solid var(--border-subtle); }
+        .masonry { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .masonry-item { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; cursor: pointer; }
+        .masonry-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .masonry-item:hover img { transform: scale(1.08); }
+        .masonry-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 20px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.95)); color: white; transform: translateY(30px); opacity: 0; transition: all 0.3s;
+        }
+        .masonry-item:hover .masonry-overlay { transform: translateY(0); opacity: 1; }
+        .masonry-overlay h4 { color: var(--gold-main); font-size: 1.2rem; margin-bottom: 5px; }
+        
+        /* Sección de Herramientas de Planeación */
+        .planning-tools { background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-card) 100%); padding: 80px 5%; text-align: center; border-bottom: 1px solid var(--border-subtle); }
+        .tools-grid { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+        .tool-card {
+            background: rgba(0,0,0,0.3); padding: 40px; border-radius: 16px; border: 1px solid rgba(0, 229, 255, 0.1); width: 250px; transition: all 0.3s;
+        }
+        .tool-card:hover { background: rgba(0, 229, 255, 0.05); border-color: var(--cyan-tech); transform: translateY(-5px); }
+        .tool-icon { font-size: 3.5rem; margin-bottom: 25px; display: block; }
+        .tool-card h3 { color: white; margin-bottom: 10px; font-size: 1.2rem; }
+        .mode-light .tool-card h3 { color: black; }
+        .tool-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* FOOTER LOCALIZADO */
+        footer {
+            text-align: center; padding: 50px 5%; background-color: #03050a;
+            border-top: 1px solid rgba(212, 175, 55, 0.2); color: var(--text-muted); font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo_light.png" alt="Ruta Eventos MTY" class="logo-img logo-light">
+            <img src="logo_dark.png" alt="Ruta Eventos MTY Directo" class="logo-img logo-dark">
+        </div>
+        <div class="nav-actions">
+            <button class="btn-mode" id="btnModeToggle">Modo Claro</button>
+            <div class="nav-links">
+                <a href="#">Directorio</a>
+                <a href="#">Inspiración MTY</a>
+                <span style="color: var(--bg-deep); background: var(--gold-main); padding: 4px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">Acceso Proveedores</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-container">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Crea Momentos Memorables</h1>
+            <p>El directorio premium de autoría directa en Monterrey. Conecta con artistas verificados y planea con herramientas exclusivas.</p>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="¿Qué buscas? Ej. Fotografía, Música, Salón, Planner..." id="searchInput">
+                <select>
+                    <option>Todo MTY/SPGG</option>
+                    <option>San Pedro Garza García</option>
+                    <option>Carretera Nacional</option>
+                    <option>Valle de Monterrey</option>
+                </select>
+                <button class="btn-search" onclick="alert('Funcionalidad de búsqueda simulada.')">Buscar</button>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="filters-container">
+            <button class="filter-btn active" onclick="filtrar('todos')">Ver Todos</button>
+            <button class="filter-btn" onclick="filtrar('musica')">Música</button>
+            <button class="filter-btn" onclick="filtrar('foto')">Foto y Video</button>
+            <button class="filter-btn" onclick="filtrar('flores')">Diseño Floral</button>
+            <button class="filter-btn" onclick="filtrar('planner')">Wedding Planners</button>
+            <button class="filter-btn" onclick="filtrar('vestidos')">Vestidos</button>
+            <button class="filter-btn" onclick="filtrar('extras')">Cabinas & Extras</button>
+        </div>
+
+        <div class="proveedores">
+            <div class="grid" id="directorioGrid">
+                
+                <div class="card" data-category="musica">
+                    <div class="badge-rating">★ 5.0 Excelente</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80" alt="Dolce Ensamble" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Música para Eventos</span>
+                        <h3 class="card-title">Dolce Ensamble</h3>
+                        <div class="location">📍 Monterrey y Área Metropolitana</div>
+                        <p class="card-text">Atmósfera musical premium. Saxofón, violín y ensamble de autoría para ceremonias y recepciones de alto nivel.</p>
+                        <button class="btn-contact" onclick="contactar('Dolce Ensamble')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="foto">
+                    <div class="badge-rating">★ 4.9 Cinematográfico</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=80" alt="Foto" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Agencia Cinematográfica</span>
+                        <h3 class="card-title">Luz y Arte Studio</h3>
+                        <div class="location">📍 San Pedro Garza García</div>
+                        <p class="card-text">Narrativas visuales que trascienden. Cobertura cinematográfica integral en 4K y drones para capturar cada emoción.</p>
+                        <button class="btn-contact" onclick="contactar('Luz y Arte Studio')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="flores">
+                    <div class="badge-rating">★ 5.0 Destacado</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80" alt="Flores" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Diseño Floral</span>
+                        <h3 class="card-title">Botánica Floral MTY</h3>
+                        <div class="location">📍 Santiago, N.L.</div>
+                        <p class="card-text">Diseño floral espectacular y localizado. Creamos escenarios mágicos con arcos y centros de mesa monumentales.</p>
+                        <button class="btn-contact" onclick="contactar('Botánica Floral')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="planner">
+                    <div class="badge-rating">★ 5.0 Experta</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="Planner" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Wedding Planner SPGG</span>
+                        <h3 class="card-title">Mágica Esencia Planners</h3>
+                        <div class="location">📍 Monterrey/San Pedro</div>
+                        <p class="card-text">Coordinación y diseño integral de eventos destino y locales. Tú disfruta, nosotros materializamos tu visión.</p>
+                        <button class="btn-contact" onclick="contactar('Mágica Esencia Planners')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="vestidos">
+                    <div class="badge-rating">★ 4.8 Boutique</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1595911417246-13d87532faaf?auto=format&fit=crop&w=800&q=80" alt="Vestidos" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Alta Costura Novias y XV</span>
+                        <h3 class="card-title">Atelier Novias SPGG</h3>
+                        <div class="location">📍 Calzada del Valle</div>
+                        <p class="card-text">Boutique exclusiva de alta costura. Vestidos importados y entalles a la medida para lucir espectacular en tu día.</p>
+                        <button class="btn-contact" onclick="contactar('Atelier Novias')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="musica">
+                    <div class="badge-rating">★ 4.9 Show</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80" alt="Banda" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Banda Versátil MTY</span>
+                        <h3 class="card-title">Sinergia Versátil</h3>
+                        <div class="location">📍 Todo Monterrey</div>
+                        <p class="card-text">Show interactivo garantizado. Pista llena con zanqueros, pirotecnia y el mejor repertorio para bodas y XV años.</p>
+                        <button class="btn-contact" onclick="contactar('Sinergia Versátil')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+
+                <div class="card" data-category="extras">
+                    <div class="badge-rating">★ 4.9 Entretenimiento</div>
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8892bc952f?auto=format&fit=crop&w=800&q=80" alt="Cabina" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="category">Cabinas Fotográficas MTY</span>
+                        <h3 class="card-title">SmileBox 360 MTY</h3>
+                        <div class="location">📍 Zona Metropolitana</div>
+                        <p class="card-text">Diversión asegurada con plataforma 360, espejos mágicos y cabinas fotográficas impresas al instante.</p>
+                        <button class="btn-contact" onclick="contactar('SmileBox 360 MTY')">Solicitar Presupuesto Directo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="planning-tools">
+        <h2 class="section-title">Planeación <span>Sin Esfuerzo</span></h2>
+        <p class="editorial-text" style="color: var(--text-muted); margin-bottom: 30px;">Herramientas digitales exclusivas para el mercado local regiomontano.</p>
+        
+        <div class="tools-grid">
+            <div class="tool-card">
+                <span class="tool-icon">💰</span>
+                <h3>Cotizador Presupuestal</h3>
+                <p>Calcula de forma inteligente y directa los costos reales de cada proveedor en MTY.</p>
+            </div>
+            <div class="tool-card">
+                <span class="tool-icon">🗓️</span>
+                <h3>Lista de Invitados SPGG</h3>
+                <p>Gestiona y confirma asistencias, asigna mesas con facilidad desde tu celular.</p>
+            </div>
+            <div class="tool-card">
+                <span class="tool-icon">📱</span>
+                <h3>Checklist (Cronograma)</h3>
+                <p>El Checklist definitivo mes a mes para que nada se te pase por alto antes del gran día.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="inspiration">
+        <h2 class="section-title">Bodas y Eventos <span>Reales en MTY</span></h2>
+        <p class="editorial-text" style="color: var(--text-muted); margin-bottom: 40px; text-align: center;">Descubre la magia creada por nuestros artistas locales en eventos de autoría.</p>
+        
+        <div class="masonry">
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="Boda 1 MTY">
+                <div class="masonry-overlay">
+                    <h4>Boda en Carretera Nacional</h4>
+                    <p>Evento real. Diseño floral monumental por [Etiquetar Florista del Grupo].</p>
+                </div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80" alt="XV MTY">
+                <div class="masonry-overlay">
+                    <h4>XV Años en San Pedro</h4>
+                    <p>Celebración real. Cobertura de autoría por [Etiquetar Fotógrafo del Grupo].</p>
+                </div>
+            </div>
+            <div class="masonry-item">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="Boda 3 MTY">
+                <div class="masonry-overlay">
+                    <h4>Civil Íntimo SPGG</h4>
+                    <p>Reunión real. Ambientación musical premium por [Tu Negocio Etiquetado].</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Directorio Premium de Eventos MTY/SPGG. Proyecto de Colaboración Estratégica locally sourced.</p>
+    </footer>
+
+    <script>
+        // 1. Efecto de Cursor Personalizado Avanzado
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorGlow = document.getElementById('cursorGlow');
+        
+        document.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            // Punto principal rápido
+            cursorDot.style.left = posX + 'px';
+            cursorDot.style.top = posY + 'px';
+            
+            // Resplandor suave con retraso
+            cursorGlow.style.left = posX + 'px';
+            cursorGlow.style.top = posY + 'px';
+        });
+
+        // Interacción: Agrandar resplandor al hover
+        const interactables = document.querySelectorAll('a, button, .card');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorGlow.style.width = '60px';
+                cursorGlow.style.height = '60px';
+                cursorGlow.style.background = 'radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(0,0,0,0) 70%)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorGlow.style.width = '400px';
+                cursorGlow.style.height = '400px';
+                cursorGlow.style.background = 'radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(0,0,0,0) 70%)';
+            });
+        });
+
+        // 2. Lógica de Cambio de Modo Claro/Oscuro & Logotipos
+        const body = document.body;
+        const btnModeToggle = document.getElementById('btnModeToggle');
+        
+        // Predeterminado: Modo Oscuro. Si hay cookie o preferencia, aplicar modo claro.
+        if (localStorage.getItem('mode') === 'light') {
+            applyLightMode();
+        }
+
+        btnModeToggle.addEventListener('click', () => {
+            if (body.classList.contains('mode-light')) {
+                applyDarkMode();
+            } else {
+                applyLightMode();
+            }
+        });
+
+        function applyLightMode() {
+            body.classList.add('mode-light');
+            btnModeToggle.innerText = 'Modo Oscuro';
+            btnModeToggle.style.background = 'rgba(0,0,0,0.08)';
+            btnModeToggle.style.color = 'black';
+            localStorage.setItem('mode', 'light');
+        }
+
+        function applyDarkMode() {
+            body.classList.remove('mode-light');
+            btnModeToggle.innerText = 'Modo Claro';
+            btnModeToggle.style.background = 'rgba(255,255,255,0.05)';
+            btnModeToggle.style.color = 'white';
+            localStorage.setItem('mode', 'dark');
+        }
+
+        // 3. Simulación de Contacto Directo a WhatsApp
+        function contactar(nombreProveedor) {
+            alert(`¡Simulación de Contacto Directo MTY!\n\nAl hacer clic aquí, se abrirá WhatsApp con el siguiente mensaje:\n\n"Hola, vi tu perfil verificado en el Directorio Premium Ruta Eventos MTY. Me interesa contactar con '${nombreProveedor}' para cotizar una fecha."`);
+        }
+
+        // 4. Funcionalidad de Filtrado Mágico (Dinamismo en Vivo)
+        function filtrar(categoria) {
+            const botones = document.querySelectorAll('.filter-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const tarjetas = document.querySelectorAll('.card');
+            tarjetas.forEach(tarjeta => {
+                if (categoria === 'todos') {
+                    tarjeta.style.display = 'block';
+                    tarjeta.style.animation = 'fadeIn 0.5s ease forwards';
+                } else {
+                    if (tarjeta.getAttribute('data-category') === categoria) {
+                        tarjeta.style.display = 'block';
+                        tarjeta.style.animation = 'fadeIn 0.5s ease forwards';
+                    } else {
+                        tarjeta.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
