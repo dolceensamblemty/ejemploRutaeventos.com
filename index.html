@@ -44,7 +44,6 @@
            ========================================================================== */
         * {
             margin: 0; padding: 0; box-sizing: border-box;
-            cursor: none !important; 
             transition: background-color 0.4s ease, color 0.4s ease; 
         }
 
@@ -63,26 +62,6 @@
         .section-header h2 { font-family: var(--font-title); font-size: clamp(2rem, 4vw, 2.8rem); color: var(--text-main); margin-bottom: 0.5rem;}
         .section-header h2 span { color: var(--accent-dynamic); font-style: italic; }
         .section-header p { color: var(--text-sec); font-size: 1.1rem; }
-
-        /* ==========================================================================
-           3. CURSOR PERSONALIZADO
-           ========================================================================== */
-        .cursor-dot, .cursor-glow {
-            position: fixed; top: 0; left: 0; border-radius: 50%;
-            pointer-events: none; transform: translate(-50%, -50%); z-index: 10000; 
-        }
-        .cursor-dot {
-            width: 8px; height: 8px; background-color: var(--accent-dynamic);
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-        .cursor-glow {
-            width: 40px; height: 40px; background-color: rgba(0, 229, 255, 0.15); filter: blur(8px);
-        }
-        .cursor-dot.hover-active {
-            transform: translate(-50%, -50%) scale(2);
-            background-color: var(--accent-dynamic);
-            box-shadow: 0 0 10px var(--accent-dynamic);
-        }
 
         /* ==========================================================================
            4. GATEKEEPER (PANTALLA DE BIENVENIDA)
@@ -496,9 +475,6 @@
 </head>
 <body>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-glow"></div>
-
     <div id="welcome-screen">
         <div class="welcome-overlay"></div>
         <div class="welcome-content">
@@ -711,42 +687,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            /* --- A. LÓGICA DEL CURSOR --- */
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorGlow = document.querySelector('.cursor-glow');
-            
-            function initCursorHover() {
-                document.querySelectorAll('.interactable, a, button, input, select, .card, .tool-card, .masonry-item').forEach(el => {
-                    el.removeEventListener('mouseenter', addHover);
-                    el.removeEventListener('mouseleave', removeHover);
-                    el.addEventListener('mouseenter', addHover);
-                    el.addEventListener('mouseleave', removeHover);
-                });
-            }
-            const addHover = () => cursorDot.classList.add('hover-active');
-            const removeHover = () => cursorDot.classList.remove('hover-active');
-
-            let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-            let dotX = mouseX, dotY = mouseY, glowX = mouseX, glowY = mouseY;
-            
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            if (isTouchDevice) {
-                cursorDot.style.display = 'none';
-                cursorGlow.style.display = 'none';
-            } else {
-                window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-
-                function animateCursor() {
-                    dotX += (mouseX - dotX) * 0.5; dotY += (mouseY - dotY) * 0.5;
-                    glowX += (mouseX - glowX) * 0.15; glowY += (mouseY - glowY) * 0.15;
-                    cursorDot.style.left = `${dotX}px`; cursorDot.style.top = `${dotY}px`;
-                    cursorGlow.style.left = `${glowX}px`; cursorGlow.style.top = `${glowY}px`;
-                    requestAnimationFrame(animateCursor);
-                }
-                animateCursor();
-                initCursorHover();
-            }
-
             /* --- B. BASES DE DATOS MOCKUP --- */
             const proveedoresData = [
                 { id: 1, nombre: "Dolce Ensamble", categoria: "musica", tiposEvento: ["bodas", "xv_anos", "corporativo", "bautizos_social"], imagen: "https://images.unsplash.com/photo-1573032731006-0cecb8274712?q=80&w=2070&auto=format&fit=crop", rating: "5.0", ubicacion: "Monterrey / SPGG", descripcion: "Elegancia musical con saxofón y violín. Creamos atmósferas inolvidables para cenas, bodas y eventos exclusivos." },
@@ -839,8 +779,6 @@
                     `;
                     grid.insertAdjacentHTML('beforeend', cardHTML);
                 });
-                
-                if(!isTouchDevice) setTimeout(initCursorHover, 100);
             }
 
             const filterBtns = document.querySelectorAll('.filter-btn');
@@ -958,8 +896,6 @@
                         btnProveedoresDesktop.style.color = 'var(--accent-dynamic)';
                     }
                     if(btnProveedoresMobile) btnProveedoresMobile.innerText = '🏠'; 
-                    
-                    if(!isTouchDevice) setTimeout(initCursorHover, 100);
                 } else {
                     providerDashboard.style.opacity = '0';
                     setTimeout(() => {
